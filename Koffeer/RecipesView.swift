@@ -55,7 +55,7 @@ struct RecipesView: View {
             Text("Select an item")
         }
         .sheet(item: $selectedItem) { item in
-            BlendView(blend: item.coffeeBlend) { newBlend in
+            BlendsView() { newBlend in
                 item.coffeeBlend = newBlend
             }
         }

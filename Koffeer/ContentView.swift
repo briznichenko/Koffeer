@@ -19,7 +19,7 @@ struct ContentView: View {
                 }
                 .tag(1)
 
-            BlendsView()
+            BlendsView(onDismiss: .none)
                 .tabItem {
                     Image(systemName: "cup.and.saucer.fill")
                     Text("Blends")

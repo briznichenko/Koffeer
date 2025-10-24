@@ -9,6 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct BlendsView: View {
+    @Environment(\.dismiss) private var dismiss
+    let onDismiss: ((CoffeeBlend) -> Void)?
+    
     @Environment(\.modelContext) private var modelContext
     @Query private var blends: [CoffeeBlend]
     @State private var selectedBlend: CoffeeBlend?
@@ -19,7 +22,10 @@ struct BlendsView: View {
             List {
                 ForEach(blends) { blend in
                     NavigationLink {
-                        
+                        Button("Done") {
+                            onDismiss?(blend)
+                            dismiss()
+                        }
                     } label: {
                         HStack {
                             Image(uiImage: avatarUIImage(from: blend.imageData))
@@ -36,19 +42,21 @@ struct BlendsView: View {
                     }
                 }
                 .onDelete(perform: deleteItems)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                    ToolbarItem {
-                        Button(action: addItem) {
-                            Label("Add Item", systemImage: "plus")
-                        }
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button(action: addItem) {
+                        Label("Add Item", systemImage: "plus")
                     }
                 }
             }
         } detail: {
             Text("Select a blend")
+        }
+        .sheet(item: $selectedBlend) { blend in
+            BlendView(blend: blend) { newBlend in
+                selectedBlend = newBlend
+            }
         }
     }
         
