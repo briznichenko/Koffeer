@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CollapsibleView<Content: View>: View {
     let title: String
-    @State var isExpanded = false
+    @Binding var isExpanded: Bool
     @ViewBuilder let content: Content
     
     var body: some View {

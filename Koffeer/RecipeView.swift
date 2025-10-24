@@ -13,7 +13,7 @@ struct RecipeView: View {
     @State private var isRunning = false
     @State private var elapsedSeconds: Double = 0
     @State private var timer: Timer?
-    // Track next stop time in seconds
+
     @State private var currentStopSec: Int? {
         didSet {
             switch currentStopSec {
@@ -37,14 +37,14 @@ struct RecipeView: View {
         }
     }
     
-    @State private var isExpanded1 = true
+    @State private var isExpanded1 = false
     @State private var isExpanded2 = false
     @State private var isExpanded3 = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                Image(uiImage: avatarUIImage(from: item.imageData))
+                Image(uiImage: avatarUIImage(from: item.coffeeBlend.imageData))
                     .resizable()
                     .clipped()
                     .frame(width: 100, height: 100)
@@ -53,7 +53,7 @@ struct RecipeView: View {
                 ForEach(item.steps.indices, id: \.self) { index in
                     switch index {
                     case 0:
-                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: isExpanded1) {
+                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: $isExpanded1) {
                             Text("Pour 50ml")
                             AsyncImage(url: URL(string: "https://cdn.shopify.com/s/files/1/0800/4858/7043/files/Brew_Guide_Hario_V60_Step_1.jpg?v=1738619601")) { result in
                                 result.image?
@@ -63,7 +63,7 @@ struct RecipeView: View {
                             .frame(width: 200, height: 200)
                         }
                     case 1:
-                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: isExpanded2) {
+                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: $isExpanded2) {
                             Text("Pour 100ml")
                             AsyncImage(url: URL(string: "https://thecoffeecalculator.com/_next/image?url=%2Fimages%2Fguides%2Fpour-over-v60.jpg&w=3840&q=65")) { result in
                                 result.image?
@@ -73,7 +73,7 @@ struct RecipeView: View {
                             .frame(width: 200, height: 200)
                         }
                     case 2:
-                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: isExpanded3) {
+                        CollapsibleView(title: "Step №\(index + 1): \(item.steps[index] / 60):\(item.steps[index] % 60) sec", isExpanded: $isExpanded3) {
                             Text("Pour 150ml")
                             AsyncImage(url: URL(string: "https://unionroasted.com/cdn/shop/articles/v60-brew-tip-hero_8c4fc3fa-ba4d-491d-9386-ed586a536256_850x.png?v=1547659010")) { result in
                                 result.image?

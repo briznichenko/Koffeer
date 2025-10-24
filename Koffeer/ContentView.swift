@@ -7,15 +7,13 @@
 
 import SwiftUI
 import SwiftData
-import PhotosUI
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     
     @State private var selectedItem: Item?
-    @State private var showImagePicker = false
-    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var showBlendDetail = false
 
     var body: some View {
         NavigationSplitView {
@@ -25,14 +23,16 @@ struct ContentView: View {
                         RecipeView(item: item)
                     } label: {
                         HStack {
-                            Image(uiImage: avatarUIImage(from: item.imageData))
+                            Image(uiImage: avatarUIImage(from: item.coffeeBlend.imageData))
                                 .resizable()
                                 .frame(width: 40, height: 40)
                                 .clipShape(Rectangle())
                                 .onTapGesture {
                                     selectedItem = item
-                                    showImagePicker = true
+                                    showBlendDetail = true
                                 }
+                            Divider()
+                            Text(item.coffeeBlend.name)
                             Divider()
                             Text(item.type?.rawValue ?? "blank")
                         }
@@ -54,18 +54,9 @@ struct ContentView: View {
         } detail: {
             Text("Select an item")
         }
-        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto, matching: .images)
-        .onChange(of: selectedPhoto) { _, newPhoto in
-            guard let item = selectedItem, let newPhoto else { return }
-            Task {
-                if let data = try? await newPhoto.loadTransferable(type: Data.self) {
-                    await MainActor.run {
-                        item.imageData = data
-                    }
-                }
-                // Clean up
-                selectedPhoto = nil
-                selectedItem = nil
+        .sheet(item: $selectedItem) { item in
+            BlendView(blend: item.coffeeBlend) { newBlend in
+                item.coffeeBlend = newBlend
             }
         }
     }
