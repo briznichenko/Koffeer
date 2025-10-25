@@ -16,6 +16,20 @@ struct BlendView: View {
     
     @State private var showBlendPhotoPicker: Bool = false
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var recognizedText = ""
+    
+    private var bindingForName: Binding<String> {
+        Binding(
+            get: { recognizedText.isEmpty ? blend.name : recognizedText },
+            set: { newValue in
+                if recognizedText.isEmpty {
+                    blend.name = newValue
+                } else {
+                    recognizedText = newValue
+                }
+            }
+        )
+    }
     
     var body: some View {
         ScrollView {
@@ -41,7 +55,7 @@ struct BlendView: View {
                         selectedPhoto = nil
                     }
                 }
-            TextField("Enter name", text: $blend.name)
+            TextField("Enter name", text: bindingForName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             VStack(spacing: 20) {
@@ -70,6 +84,14 @@ struct BlendView: View {
                 
                 Text("\(blend.bitterness)/5")
                     .font(.headline)
+            }
+            Spacer()
+            Button("Extract Text") {
+                TextRecognition.recognizeText(from: avatarUIImage(from: blend.imageData)) { text in
+                    DispatchQueue.main.async {
+                        recognizedText = text
+                    }
+                }
             }
             Spacer()
             Button("Done") {
