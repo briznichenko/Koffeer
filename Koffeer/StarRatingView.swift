@@ -13,18 +13,23 @@ struct StarRatingView: View {
     var starSize: CGFloat = 30
     var filledColor: Color = .yellow
     var emptyColor: Color = .gray
-
+    
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 6) {
             ForEach(1...maxRating, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")
                     .resizable()
+                    .scaledToFit()
                     .frame(width: starSize, height: starSize)
-                    .foregroundColor(index <= rating ? filledColor : emptyColor)
+                    .foregroundStyle(index <= rating ? filledColor : emptyColor)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         rating = index
                     }
+                    .accessibilityLabel("Set rating to \(index)")
             }
         }
+        .accessibilityElement(children: .contain)
     }
 }
+
