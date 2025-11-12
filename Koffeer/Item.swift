@@ -11,6 +11,7 @@ import SwiftData
 @Model
 final class CoffeeBlend {
     var name: String
+    var details: String?
     var sweetness: Int
     var sourness: Int
     var bitterness: Int

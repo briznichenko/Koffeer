@@ -16,28 +16,13 @@ struct BlendView: View {
     
     @State private var showBlendPhotoPicker: Bool = false
     @State private var selectedPhoto: PhotosPickerItem?
-    @State private var recognizedText = ""
-    
-    private var bindingForName: Binding<String> {
-        Binding(
-            get: { recognizedText.isEmpty ? blend.name : recognizedText },
-            set: { newValue in
-                if recognizedText.isEmpty {
-                    blend.name = newValue
-                } else {
-                    recognizedText = newValue
-                }
-            }
-        )
-    }
     
     var body: some View {
         ScrollView {
             Image(uiImage: avatarUIImage(from: blend.imageData))
                 .resizable()
                 .padding(.top)
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
+                .aspectRatio(1.0, contentMode: .fit)
                 .clipShape(Rectangle())
                 .onTapGesture {
                     showBlendPhotoPicker = true
@@ -55,51 +40,64 @@ struct BlendView: View {
                         selectedPhoto = nil
                     }
                 }
-            TextField("Enter name", text: bindingForName)
+            TextField("Enter name", text: $blend.name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            VStack(spacing: 20) {
-                Text("Sourness")
-                    .font(.title)
-                
-                StarRatingView(rating: $blend.sourness)
-                
-                Text("\(blend.sourness)/5")
-                    .font(.headline)
-            }
-            VStack(spacing: 20) {
-                Text("Sweetness")
-                    .font(.title)
-                
-                StarRatingView(rating: $blend.sweetness)
-                
-                Text("\(blend.sweetness)/5")
-                    .font(.headline)
-            }
-            VStack(spacing: 20) {
-                Text("Bitterness")
-                    .font(.title)
-                
-                StarRatingView(rating: $blend.bitterness)
-                
-                Text("\(blend.bitterness)/5")
-                    .font(.headline)
-            }
-            Spacer()
+            TextEditor(text: Binding(
+                get: { blend.details ?? "Blend details" },
+                set: { blend.details = $0.isEmpty ? "Blend details" : $0 }
+            ))
             Button("Extract Text") {
                 TextRecognition.recognizeText(from: avatarUIImage(from: blend.imageData)) { text in
                     DispatchQueue.main.async {
-                        recognizedText = text
+                        blend.details = text.isEmpty ? nil : text
                     }
                 }
             }
-            Spacer()
+            .foregroundStyle(.foreground)
+            .background(Color.blue)
+            .padding(.horizontal)
+            .clipShape(.ellipse)
+            Divider()
+            VStack {
+                Text("Sourness")
+                    .font(.title)
+                HStack {
+                    StarRatingView(rating: $blend.sourness)
+                    Text("\(blend.sourness)/5")
+                        .font(.headline)
+                }
+            }
+            VStack {
+                Text("Sweetness")
+                    .font(.title)
+                HStack {
+                    StarRatingView(rating: $blend.sweetness)
+                    Text("\(blend.sweetness)/5")
+                        .font(.headline)
+                }
+            }
+            VStack {
+                Text("Bitterness")
+                    .font(.title)
+                HStack {
+                    StarRatingView(rating: $blend.bitterness)
+                    Text("\(blend.bitterness)/5")
+                        .font(.headline)
+                }
+            }
+            Divider()
+            Spacer(minLength: 50)
             Button("Done") {
                 onDismiss(blend)
                 dismiss()
             }
         }
     }
+}
+
+#Preview {
+    BlendView(blend: .init(name: "Name"), onDismiss: { _ in })
 }
 
 // MARK: - Helpers (scoped to this file)
