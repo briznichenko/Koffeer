@@ -9,9 +9,8 @@ import SwiftUI
 
 struct CollapsibleView<Content: View>: View {
     let title: String
+    @Binding var isExpanded: Bool
     @ViewBuilder let content: Content
-    
-    @State var isExpanded = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
