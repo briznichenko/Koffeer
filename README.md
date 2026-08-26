@@ -2,8 +2,6 @@
 
 A SwiftUI + SwiftData iOS app for tracking coffee brew recipes and coffee blends.
 
-Personal project, doubling as a practice codebase for modern Swift — Swift 6
-strict concurrency, `@Observable`, and structured concurrency throughout.
 
 ## Features
 
@@ -22,21 +20,4 @@ strict concurrency, `@Observable`, and structured concurrency throughout.
 ## Architecture
 
 MVVM with protocol-based repositories, wired by hand in `RootDIView` — no
-singletons, no service locator. See [CLAUDE.md](CLAUDE.md) for the full
-architecture, conventions, and known issues.
-
-## Building
-
-```bash
-xcrun simctl list devices available
-xcodebuild -scheme Koffeer -destination 'platform=iOS Simulator,name=<device>' build
-```
-
-## Testing
-
-```bash
-xcodebuild -scheme Koffeer -destination 'platform=iOS Simulator,name=<device>' test
-```
-
-Test coverage is a work in progress — `BlendsViewModel` is covered so far,
-with the remaining ViewModels next.
+singletons, no service locator.
