@@ -18,20 +18,14 @@ struct BlendView: View {
 
     init(
         blend: CoffeeBlend,
-        blendsRepository: BlendsRepository? = nil,
-        textRecognitionService: TextRecognitionService? = nil,
+        blendsRepository: BlendsRepository,
+        textRecognitionService: TextRecognitionService,
         onDismiss: @escaping (CoffeeBlend) -> Void
     ) {
-        let repo = blendsRepository ?? {
-            fatalError("BlendView requires a BlendsRepository injected.")
-        }()
-
-        let textService = textRecognitionService ?? VisionTextRecognitionService()
-
         _viewModel = StateObject(wrappedValue: BlendViewModel(
             blend: blend,
-            blendsRepository: repo,
-            textRecognition: textService
+            blendsRepository: blendsRepository,
+            textRecognition: textRecognitionService
         ))
         self.onDismiss = onDismiss
     }
@@ -141,4 +135,3 @@ struct BlendView: View {
         onDismiss: { _ in }
     )
 }
-
