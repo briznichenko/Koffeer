@@ -1,12 +1,10 @@
 import Foundation
-import SwiftUI
 import Combine
 
 @MainActor
 final class RecipeViewModel: ObservableObject {
     let item: Item
 
-    // Timer state
     @Published var isRunning = false
     @Published var elapsedSeconds: Double = 0
     private var timer: Timer?

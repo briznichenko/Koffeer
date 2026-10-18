@@ -37,5 +37,7 @@ singletons, no service locator.
 
 ## Next work
 
+See [TODOs](Docs/TODO.md) for the prioritized app backlog and completion criteria.
+
 See [the image processing and storage roadmap](Docs/ImageProcessingRoadmap.md)
 for the proposed sequence, acceptance criteria, and design decisions.

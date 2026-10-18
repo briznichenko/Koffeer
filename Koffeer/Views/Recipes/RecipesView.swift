@@ -10,13 +10,15 @@ import SwiftUI
 struct RecipesView: View {
     @StateObject private var viewModel: RecipesViewModel
 
-    let itemsRepository: ItemsRepository
-    let blendsRepository: BlendsRepository
-    let textRecognitionService: TextRecognitionService
+    private let blendsRepository: BlendsRepository
+    private let textRecognitionService: TextRecognitionService
 
-    init(itemsRepository: ItemsRepository, blendsRepository: BlendsRepository, textRecognitionService: TextRecognitionService) {
+    init(
+        itemsRepository: ItemsRepository,
+        blendsRepository: BlendsRepository,
+        textRecognitionService: TextRecognitionService
+    ) {
         _viewModel = StateObject(wrappedValue: RecipesViewModel(itemsRepository: itemsRepository))
-        self.itemsRepository = itemsRepository
         self.blendsRepository = blendsRepository
         self.textRecognitionService = textRecognitionService
     }
@@ -65,7 +67,6 @@ struct RecipesView: View {
                 blendsRepository: blendsRepository,
                 textRecognitionService: textRecognitionService
             ) { newBlend in
-                // Update selected item's blend reference
                 item.coffeeBlend = newBlend
                 Task { await viewModel.load() }
             }
@@ -77,7 +78,6 @@ struct RecipesView: View {
 }
 
 #Preview {
-    // Previews could be wired with mock repos/services if needed.
     Text("Preview not configured for DI")
 }
 

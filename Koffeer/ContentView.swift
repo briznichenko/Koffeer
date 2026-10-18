@@ -16,14 +16,22 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            RecipesView(itemsRepository: itemsRepository, blendsRepository: blendsRepository, textRecognitionService: textRecognitionService)
+            RecipesView(
+                itemsRepository: itemsRepository,
+                blendsRepository: blendsRepository,
+                textRecognitionService: textRecognitionService
+            )
                 .tabItem {
                     Image(systemName: "book.fill")
                     Text("Recipes")
                 }
                 .tag(1)
 
-            BlendsView(blendsRepository: blendsRepository, textRecognitionService: textRecognitionService, onDismiss: .none)
+            BlendsView(
+                blendsRepository: blendsRepository,
+                textRecognitionService: textRecognitionService,
+                onDismiss: nil
+            )
                 .tabItem {
                     Image(systemName: "cup.and.saucer.fill")
                     Text("Blends")

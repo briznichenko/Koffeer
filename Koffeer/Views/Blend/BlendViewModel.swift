@@ -5,14 +5,11 @@ import Combine
 
 @MainActor
 final class BlendViewModel: ObservableObject {
-    // Dependencies
     private let blendsRepository: BlendsRepository
     private let textRecognition: TextRecognitionService
 
-    // Backing model being edited
     @Published private(set) var blend: CoffeeBlend
 
-    // Editable fields exposed to the View
     @Published var name: String
     @Published var detailsText: String
     @Published var sweetness: Int
@@ -20,7 +17,6 @@ final class BlendViewModel: ObservableObject {
     @Published var bitterness: Int
     @Published var imageData: Data?
 
-    // Photo picker state (owned by the View typically, but VM can expose helpers)
     @Published var isPhotoPickerPresented: Bool = false
     @Published var selectedPhotoItem: PhotosPickerItem?
 
@@ -41,7 +37,6 @@ final class BlendViewModel: ObservableObject {
         self.imageData = blend.imageData
     }
 
-    // Apply edited fields back to the model and persist
     func saveChanges() async {
         blend.name = name
         blend.details = detailsText.isEmpty ? nil : detailsText
@@ -52,7 +47,6 @@ final class BlendViewModel: ObservableObject {
         do {
             try await blendsRepository.update(blend)
         } catch {
-            // In a real app, expose an error state
             print("Failed to save blend: \(error)")
         }
     }
@@ -67,7 +61,6 @@ final class BlendViewModel: ObservableObject {
                     }
                 }
             } catch {
-                // Handle error if needed
                 print("Failed to load photo: \(error)")
             }
             await MainActor.run {

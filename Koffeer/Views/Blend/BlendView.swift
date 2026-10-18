@@ -11,7 +11,6 @@ import PhotosUI
 struct BlendView: View {
     @Environment(\.dismiss) private var dismiss
 
-    // Injected ViewModel
     @StateObject private var viewModel: BlendViewModel
 
     let onDismiss: (CoffeeBlend) -> Void
@@ -51,7 +50,6 @@ struct BlendView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
-            // TextEditor with placeholder overlay
             TextEditor(text: $viewModel.detailsText)
                 .frame(minHeight: 120)
                 .padding(.horizontal)
@@ -80,33 +78,9 @@ struct BlendView: View {
 
             Divider()
 
-            VStack {
-                Text("Sourness")
-                    .font(.title)
-                HStack {
-                    StarRatingView(rating: $viewModel.sourness)
-                    Text("\(viewModel.sourness)/5")
-                        .font(.headline)
-                }
-            }
-            VStack {
-                Text("Sweetness")
-                    .font(.title)
-                HStack {
-                    StarRatingView(rating: $viewModel.sweetness)
-                    Text("\(viewModel.sweetness)/5")
-                        .font(.headline)
-                }
-            }
-            VStack {
-                Text("Bitterness")
-                    .font(.title)
-                HStack {
-                    StarRatingView(rating: $viewModel.bitterness)
-                    Text("\(viewModel.bitterness)/5")
-                        .font(.headline)
-                }
-            }
+            ratingSection("Sourness", rating: $viewModel.sourness)
+            ratingSection("Sweetness", rating: $viewModel.sweetness)
+            ratingSection("Bitterness", rating: $viewModel.bitterness)
             Divider()
             Spacer(minLength: 50)
             Button("Done") {
@@ -115,6 +89,18 @@ struct BlendView: View {
                     onDismiss(viewModel.blend)
                     dismiss()
                 }
+            }
+        }
+    }
+
+    private func ratingSection(_ title: LocalizedStringKey, rating: Binding<Int>) -> some View {
+        VStack {
+            Text(title)
+                .font(.title)
+            HStack {
+                StarRatingView(rating: rating)
+                Text("\(rating.wrappedValue)/5")
+                    .font(.headline)
             }
         }
     }

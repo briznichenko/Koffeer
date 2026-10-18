@@ -14,7 +14,6 @@ struct CollapsibleView<Content: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Header
             Button(action: {
                 withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                     isExpanded.toggle()
@@ -30,7 +29,6 @@ struct CollapsibleView<Content: View>: View {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .foregroundColor(.gray)
                         .imageScale(.small)
-                        .rotationEffect(.degrees(isExpanded ? 0 : 0))
                 }
                 .padding()
                 .background(
@@ -44,7 +42,6 @@ struct CollapsibleView<Content: View>: View {
                 .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
             }
             
-            // Collapsible content
             if isExpanded {
                 VStack(alignment: .leading, spacing: 8) {
                     content

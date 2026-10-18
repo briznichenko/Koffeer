@@ -12,9 +12,9 @@ struct BlendsView: View {
 
     @StateObject private var viewModel: BlendsViewModel
 
-    let blendsRepository: BlendsRepository
-    let textRecognitionService: TextRecognitionService
-    let onDismiss: ((CoffeeBlend) -> Void)?
+    private let blendsRepository: BlendsRepository
+    private let textRecognitionService: TextRecognitionService
+    private let onDismiss: ((CoffeeBlend) -> Void)?
 
     init(
         blendsRepository: BlendsRepository,
