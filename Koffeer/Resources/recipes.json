@@ -1,0 +1,104 @@
+[
+  {
+    "id": "koffeer-v60-single-cup",
+    "name": "V60 Single Cup",
+    "method": "v60",
+    "author": "Koffeer",
+    "coffeeGrams": 15,
+    "waterGrams": 250,
+    "waterTemperatureCelsius": 94,
+    "grind": "Medium-fine",
+    "targetDurationSeconds": 180,
+    "steps": [
+      {
+        "action": "pour",
+        "instruction": "With a rinsed filter and the grounds ready, start the timer and add 45 g of water to wet the coffee.",
+        "startTimeSeconds": 0,
+        "waterToAddGrams": 45
+      },
+      {
+        "action": "pour",
+        "instruction": "Add 105 g slowly in circles, bringing the scale to 150 g.",
+        "startTimeSeconds": 30,
+        "waterToAddGrams": 105
+      },
+      {
+        "action": "pour",
+        "instruction": "Add the remaining 100 g, bringing the scale to 250 g.",
+        "startTimeSeconds": 75,
+        "waterToAddGrams": 100
+      },
+      {
+        "action": "wait",
+        "instruction": "Let the water drain through. Aim to finish around 3 minutes."
+      }
+    ]
+  },
+  {
+    "id": "koffeer-v60-two-cups",
+    "name": "V60 Two Cups",
+    "method": "v60",
+    "author": "Koffeer",
+    "coffeeGrams": 30,
+    "waterGrams": 500,
+    "waterTemperatureCelsius": 94,
+    "grind": "Medium",
+    "targetDurationSeconds": 240,
+    "steps": [
+      {
+        "action": "pour",
+        "instruction": "Use a dripper large enough for two cups. With the filter rinsed and grounds ready, start the timer and add 90 g of water.",
+        "startTimeSeconds": 0,
+        "waterToAddGrams": 90
+      },
+      {
+        "action": "pour",
+        "instruction": "Add 210 g slowly, bringing the scale to 300 g. Pause briefly if the dripper is nearly full.",
+        "startTimeSeconds": 45,
+        "waterToAddGrams": 210
+      },
+      {
+        "action": "pour",
+        "instruction": "Add the remaining 200 g, bringing the scale to 500 g.",
+        "startTimeSeconds": 120,
+        "waterToAddGrams": 200
+      },
+      {
+        "action": "wait",
+        "instruction": "Let the water drain through. Aim to finish around 4 minutes."
+      }
+    ]
+  },
+  {
+    "id": "koffeer-aeropress-standard",
+    "name": "AeroPress Standard Cup",
+    "method": "aeropress",
+    "author": "Koffeer",
+    "coffeeGrams": 14,
+    "waterGrams": 200,
+    "waterTemperatureCelsius": 90,
+    "grind": "Medium-fine",
+    "targetDurationSeconds": 150,
+    "steps": [
+      {
+        "action": "pour",
+        "instruction": "Place the AeroPress upright on a sturdy mug with the filter cap attached and coffee inside. Start the timer and add 200 g of water.",
+        "startTimeSeconds": 0,
+        "waterToAddGrams": 200
+      },
+      {
+        "action": "stir",
+        "instruction": "Stir gently to wet all the grounds, then insert the plunger slightly to limit dripping."
+      },
+      {
+        "action": "wait",
+        "instruction": "Leave the coffee to steep until the timer reaches 2 minutes."
+      },
+      {
+        "action": "press",
+        "instruction": "Press gently for about 30 seconds, stopping if you feel strong resistance.",
+        "startTimeSeconds": 120
+      }
+    ]
+  }
+]
