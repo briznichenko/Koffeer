@@ -1,18 +1,19 @@
 import Foundation
-import Combine
+import Observation
 
+@Observable
 @MainActor
-final class RecipeViewModel: ObservableObject {
+final class RecipeViewModel {
     let item: Item
     private let clock: any BrewClock
-    private var timerTask: Task<Void, Never>?
-    private var segmentStart: TimeInterval?
-    private var accumulatedSeconds: TimeInterval = 0
+    @ObservationIgnored private var timerTask: Task<Void, Never>?
+    @ObservationIgnored private var segmentStart: TimeInterval?
+    @ObservationIgnored private var accumulatedSeconds: TimeInterval = 0
 
-    @Published private(set) var isRunning = false
-    @Published private(set) var elapsedSeconds: TimeInterval = 0
-    @Published private(set) var activeStepIndex: Int?
-    @Published var expandedStepIndex: Int?
+    private(set) var isRunning = false
+    private(set) var elapsedSeconds: TimeInterval = 0
+    private(set) var activeStepIndex: Int?
+    var expandedStepIndex: Int?
 
     var canStartTimer: Bool {
         item.steps.contains { Double($0) > elapsedSeconds }

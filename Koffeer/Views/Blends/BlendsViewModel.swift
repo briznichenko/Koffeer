@@ -1,16 +1,17 @@
 import Foundation
-import Combine
+import Observation
 
+@Observable
 @MainActor
-final class BlendsViewModel: ObservableObject {
+final class BlendsViewModel {
     private let blendsRepository: BlendsRepository
 
-    @Published var blends: [CoffeeBlend] = []
-    @Published var selectedBlend: CoffeeBlend?
-    @Published private(set) var isLoading = false
-    @Published private(set) var isMutating = false
-    @Published private(set) var loadErrorMessage: String?
-    @Published private(set) var operationErrorMessage: String?
+    var blends: [CoffeeBlend] = []
+    var selectedBlend: CoffeeBlend?
+    private(set) var isLoading = false
+    private(set) var isMutating = false
+    private(set) var loadErrorMessage: String?
+    private(set) var operationErrorMessage: String?
 
     init(blendsRepository: BlendsRepository) {
         self.blendsRepository = blendsRepository

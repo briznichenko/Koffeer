@@ -80,9 +80,8 @@ extension for placeholder generation.
 
 ## Testing
 
-Currently `KoffeerTests` and `KoffeerUITests` are unmodified Xcode boilerplate —
-there is no real coverage yet. Building it up is an active goal, not an
-afterthought.
+`KoffeerTests` has 25 Swift Testing tests covering all four ViewModels and
+in-memory SwiftData integration. `KoffeerUITests` remains Xcode boilerplate.
 
 - Swift Testing (`@Test`, `#expect`) for new tests, not XCTest.
 - Every ViewModel gets tests. Use in-memory fake repositories conforming to the
@@ -95,24 +94,31 @@ afterthought.
 Real problems, already identified. Don't rediscover them, and don't fix them
 as a side effect of unrelated work — each is its own change.
 
-1. **`TextRecognition.swift` is dead code.** It duplicates
-   `VisionTextRecognitionService` in completion-handler style, left over from the
-   refactor to protocols. Should be deleted.
-2. **`RecipeView` hardcodes exactly three brew steps** with remote image URLs. It
-   does not generalise to `Item.steps` of arbitrary length, and it breaks if the
-   third-party CDN goes away. Should be driven by the model, with local assets.
-3. **`update(_:)` on both SwiftData repositories ignores its parameter** and just
-   saves the context. It happens to work because SwiftData models are reference
-   types already tracked by the context, but the signature is misleading.
-4. **No test coverage** beyond scaffolding.
+1. Photo imports and OCR need explicit task ownership, cancellation, and
+   protection against stale results. OCR currently overwrites notes directly.
+2. Photos remain binary data in SwiftData; downsampling, thumbnails, and the
+   approved explicit-file storage design still need implementation.
+3. Recipe catalog loading and UI wiring are user-owned. Existing brew records
+   contain only time boundaries, so step descriptions remain generic.
+4. Feature Views still forward dependencies for navigation; address navigation
+   ownership as a separate change.
+
+## Completed foundations
+
+- ViewModels use `@Observable`; Views own them with `@State` and access bindings
+  with `@Bindable`.
+- App and test targets use Swift 6 in Debug and Release.
+- Failed saves retain drafts and restore model fields; failed refreshes preserve
+  loaded content. Blend assignment saves explicitly through its ViewModel.
+- Repository updates validate model-context ownership, then save all pending
+  context changes. Linked blends cannot be deleted.
+- The timer uses an injected monotonic clock, pauses at step boundaries and when
+  its screen is inactive, and resumes only on an explicit tap.
 
 ## Planned work
 
-- Test coverage for all four ViewModels
-- Fix the three issues above
-- The `RecipeView` timer uses `Timer.scheduledTimer` on a 10ms tick — a good
-  candidate for `AsyncStream` or a `Task` with `Task.sleep`, and a better fit
-  for the strict-concurrency target
+Follow `Docs/TODO.md` and `Docs/ImageProcessingRoadmap.md` for remaining work.
+Image-file schema and migration design require approval before implementation.
 
 ## Working style
 

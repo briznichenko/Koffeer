@@ -11,7 +11,7 @@ import PhotosUI
 struct BlendView: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject private var viewModel: BlendViewModel
+    @State private var viewModel: BlendViewModel
 
     let onDismiss: (CoffeeBlend) -> Void
 
@@ -21,7 +21,7 @@ struct BlendView: View {
         textRecognitionService: TextRecognitionService,
         onDismiss: @escaping (CoffeeBlend) -> Void
     ) {
-        _viewModel = StateObject(wrappedValue: BlendViewModel(
+        _viewModel = State(initialValue: BlendViewModel(
             blend: blend,
             blendsRepository: blendsRepository,
             textRecognition: textRecognitionService
@@ -30,6 +30,8 @@ struct BlendView: View {
     }
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+
         ScrollView {
             Image(uiImage: avatarUIImage(from: viewModel.imageData))
                 .resizable()

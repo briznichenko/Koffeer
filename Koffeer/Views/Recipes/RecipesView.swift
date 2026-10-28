@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipesView: View {
-    @StateObject private var viewModel: RecipesViewModel
+    @State private var viewModel: RecipesViewModel
 
     private let blendsRepository: BlendsRepository
     private let textRecognitionService: TextRecognitionService
@@ -20,13 +20,15 @@ struct RecipesView: View {
         textRecognitionService: TextRecognitionService,
         brewClock: any BrewClock
     ) {
-        _viewModel = StateObject(wrappedValue: RecipesViewModel(itemsRepository: itemsRepository))
+        _viewModel = State(initialValue: RecipesViewModel(itemsRepository: itemsRepository))
         self.blendsRepository = blendsRepository
         self.textRecognitionService = textRecognitionService
         self.brewClock = brewClock
     }
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+
         NavigationSplitView {
             List {
                 if viewModel.isLoading {

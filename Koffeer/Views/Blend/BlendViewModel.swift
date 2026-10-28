@@ -1,27 +1,28 @@
 import Foundation
 import SwiftUI
 import PhotosUI
-import Combine
+import Observation
 
+@Observable
 @MainActor
-final class BlendViewModel: ObservableObject {
+final class BlendViewModel {
     private let blendsRepository: BlendsRepository
     private let textRecognition: TextRecognitionService
 
-    @Published private(set) var blend: CoffeeBlend
+    private(set) var blend: CoffeeBlend
 
-    @Published var name: String
-    @Published var detailsText: String
-    @Published var sweetness: Int
-    @Published var sourness: Int
-    @Published var bitterness: Int
-    @Published var imageData: Data?
+    var name: String
+    var detailsText: String
+    var sweetness: Int
+    var sourness: Int
+    var bitterness: Int
+    var imageData: Data?
 
-    @Published private(set) var isSaving = false
-    @Published private(set) var saveErrorMessage: String?
+    private(set) var isSaving = false
+    private(set) var saveErrorMessage: String?
 
-    @Published var isPhotoPickerPresented: Bool = false
-    @Published var selectedPhotoItem: PhotosPickerItem?
+    var isPhotoPickerPresented: Bool = false
+    var selectedPhotoItem: PhotosPickerItem?
 
     init(
         blend: CoffeeBlend,

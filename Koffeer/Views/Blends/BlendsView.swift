@@ -10,7 +10,7 @@ import SwiftUI
 struct BlendsView: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject private var viewModel: BlendsViewModel
+    @State private var viewModel: BlendsViewModel
 
     private let blendsRepository: BlendsRepository
     private let textRecognitionService: TextRecognitionService
@@ -21,13 +21,15 @@ struct BlendsView: View {
         textRecognitionService: TextRecognitionService,
         onDismiss: ((CoffeeBlend) -> Void)?
     ) {
-        _viewModel = StateObject(wrappedValue: BlendsViewModel(blendsRepository: blendsRepository))
+        _viewModel = State(initialValue: BlendsViewModel(blendsRepository: blendsRepository))
         self.blendsRepository = blendsRepository
         self.textRecognitionService = textRecognitionService
         self.onDismiss = onDismiss
     }
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+
         NavigationSplitView {
             List {
                 if viewModel.isLoading {

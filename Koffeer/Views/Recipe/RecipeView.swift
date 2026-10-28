@@ -11,14 +11,16 @@ struct RecipeView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     let item: Item
-    @StateObject private var viewModel: RecipeViewModel
+    @State private var viewModel: RecipeViewModel
 
     init(item: Item, clock: any BrewClock) {
         self.item = item
-        _viewModel = StateObject(wrappedValue: RecipeViewModel(item: item, clock: clock))
+        _viewModel = State(initialValue: RecipeViewModel(item: item, clock: clock))
     }
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+
         ScrollView {
             VStack(spacing: 16) {
                 Image(uiImage: avatarUIImage(from: item.coffeeBlend.imageData))

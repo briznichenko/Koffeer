@@ -1,6 +1,10 @@
 # Image processing and storage roadmap
 
-Reviewed 2026-10-13. This is a development plan, not implemented functionality.
+Reviewed 2026-10-28. This remains the photo-work development plan.
+The concurrency and testing foundation is complete: all four ViewModels use
+Observation, Debug and Release targets use Swift 6, and 25 tests cover
+ViewModels and persistence. Failed saves retain drafts; timing uses an injected
+clock. Photo processing, file storage, and OCR changes below remain pending.
 
 ## Goal
 
@@ -14,7 +18,7 @@ with thumbnails, cropping, zoom, and comparison as additional experience.
 Koffeer provides personal-project practice in those mechanisms, not evidence of
 production healthcare experience.
 
-## Starting point
+## Original starting point (2026-10-13)
 
 - `PhotosPicker` loads image bytes into `BlendViewModel.imageData`.
 - `CoffeeBlend.imageData` persists those bytes with SwiftData.

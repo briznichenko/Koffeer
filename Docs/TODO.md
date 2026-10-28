@@ -42,11 +42,11 @@ boundaries. Recipe catalog loading and instruction wiring remain user-owned.
 
 ## 3. Observation, concurrency, and tests
 
-- [ ] Migrate all four ViewModels from `ObservableObject` / `@Published` to
+- [x] Migrate all four ViewModels from `ObservableObject` / `@Published` to
   `@Observable`, with view-owned `@State` and bindings where needed.
-- [ ] Resolve actor-isolation diagnostics and remove target-level Swift 5
+- [x] Resolve actor-isolation diagnostics and remove target-level Swift 5
   overrides. Verify Swift 6 in Debug and Release without weakening checks.
-- [ ] Add meaningful tests for `BlendViewModel`, `RecipesViewModel`, and
+- [x] Add meaningful tests for `BlendViewModel`, `RecipesViewModel`, and
   `RecipeViewModel`; extend the four existing blends-list tests for failures.
 - [ ] Keep repository/service construction at the root and remove dependency
   forwarding from feature Views when addressing navigation separately.
@@ -79,5 +79,6 @@ Approve schema and migration design before implementation.
 - [ ] Handle model-container startup failures deliberately and correct the
   current error message interpolation. Never reset stored data as recovery.
 - [ ] Add CI builds and unit tests once the Swift 6 migration is complete.
-- [ ] Refresh `AGENTS.md`: dead OCR cleanup is complete, and four real unit tests
-  already exist; observation and Swift 6 target migration are still pending.
+- [x] Refresh the existing `CLAUDE.md` project guide: dead OCR cleanup,
+  observation, Swift 6, and ViewModel test coverage are complete. There is no
+  project `AGENTS.md`.
