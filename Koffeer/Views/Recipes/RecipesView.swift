@@ -12,15 +12,18 @@ struct RecipesView: View {
 
     private let blendsRepository: BlendsRepository
     private let textRecognitionService: TextRecognitionService
+    private let brewClock: any BrewClock
 
     init(
         itemsRepository: ItemsRepository,
         blendsRepository: BlendsRepository,
-        textRecognitionService: TextRecognitionService
+        textRecognitionService: TextRecognitionService,
+        brewClock: any BrewClock
     ) {
         _viewModel = StateObject(wrappedValue: RecipesViewModel(itemsRepository: itemsRepository))
         self.blendsRepository = blendsRepository
         self.textRecognitionService = textRecognitionService
+        self.brewClock = brewClock
     }
 
     var body: some View {
@@ -38,7 +41,7 @@ struct RecipesView: View {
                 }
                 ForEach(viewModel.items) { item in
                     NavigationLink {
-                        RecipeView(item: item)
+                        RecipeView(item: item, clock: brewClock)
                     } label: {
                         HStack {
                             Image(uiImage: avatarUIImage(from: item.coffeeBlend.imageData))

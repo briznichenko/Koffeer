@@ -11,6 +11,7 @@ struct ContentView: View {
     let blendsRepository: BlendsRepository
     let itemsRepository: ItemsRepository
     let textRecognitionService: TextRecognitionService
+    let brewClock: any BrewClock
 
     @State private var selectedTab = 0
 
@@ -19,7 +20,8 @@ struct ContentView: View {
             RecipesView(
                 itemsRepository: itemsRepository,
                 blendsRepository: blendsRepository,
-                textRecognitionService: textRecognitionService
+                textRecognitionService: textRecognitionService,
+                brewClock: brewClock
             )
                 .tabItem {
                     Image(systemName: "book.fill")

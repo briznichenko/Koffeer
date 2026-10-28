@@ -40,11 +40,13 @@ private struct RootDIView: View {
         let blendsRepo = SwiftDataBlendsRepository(context: modelContext)
         let itemsRepo = SwiftDataItemsRepository(context: modelContext)
         let textService = VisionTextRecognitionService()
+        let brewClock = ContinuousBrewClock()
 
         ContentView(
             blendsRepository: blendsRepo,
             itemsRepository: itemsRepo,
-            textRecognitionService: textService
+            textRecognitionService: textService,
+            brewClock: brewClock
         )
     }
 }

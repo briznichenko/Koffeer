@@ -27,16 +27,18 @@ uses a fresh context; process relaunch and visual interaction remain manual chec
 
 ## 2. Brew steps and timer
 
-- [ ] Render arbitrary brew steps instead of three hardcoded sections. Replace
-  remote illustrations with local assets and represent the active step directly.
-- [ ] Decide whether step boundaries pause or continue, and whether background
-  time counts. Preserve the current behavior until those decisions are made.
-- [ ] Replace the 10 ms timer with a cancellable task and elapsed time derived
-  from a clock. Inject time for deterministic tests rather than waiting in tests.
-- [ ] Test pause/resume/reset, final-step completion, empty steps, and screen
-  exit/re-entry. Audit the current start/resume step-selection logic.
-- [ ] Correct timer fractional-second formatting: the display currently uses
-  milliseconds modulo 100 instead of centiseconds.
+- [x] Render arbitrary brew steps with a local SF Symbol instead of remote
+  illustrations and represent the active step directly.
+- [x] Pause at step boundaries and count time only while the screen is active,
+  as chosen on 2026-10-28. Returning to the screen requires an explicit resume.
+- [x] Replace the 10 ms timer with a cancellable task and elapsed time derived
+  from an injected monotonic clock. Refresh the display every 50 ms.
+- [x] Test pause/resume/reset, final-step completion, empty and duplicate steps,
+  delayed refreshes, and screen exit/re-entry with injected time.
+- [x] Format fractional seconds as centiseconds.
+
+Step content remains generic because existing brew records store only time
+boundaries. Recipe catalog loading and instruction wiring remain user-owned.
 
 ## 3. Observation, concurrency, and tests
 
