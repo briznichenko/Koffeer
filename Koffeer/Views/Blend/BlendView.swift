@@ -83,14 +83,25 @@ struct BlendView: View {
             ratingSection("Bitterness", rating: $viewModel.bitterness)
             Divider()
             Spacer(minLength: 50)
-            Button("Done") {
+            if let message = viewModel.saveErrorMessage {
+                Text(message)
+                    .foregroundStyle(.red)
+                    .padding(.horizontal)
+            }
+            if viewModel.isSaving {
+                ProgressView("Saving…")
+            }
+            Button(viewModel.saveErrorMessage == nil ? "Done" : "Retry Save") {
                 Task {
-                    await viewModel.saveChanges()
-                    onDismiss(viewModel.blend)
-                    dismiss()
+                    if await viewModel.saveChanges() {
+                        onDismiss(viewModel.blend)
+                        dismiss()
+                    }
                 }
             }
         }
+        .disabled(viewModel.isSaving)
+        .interactiveDismissDisabled(viewModel.isSaving)
     }
 
     private func ratingSection(_ title: LocalizedStringKey, rating: Binding<Int>) -> some View {

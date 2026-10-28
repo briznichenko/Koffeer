@@ -18,6 +18,9 @@ final class SwiftDataItemsRepository: ItemsRepository {
     }
 
     func update(_ item: Item) async throws {
+        guard item.modelContext === context else {
+            throw PersistenceError.modelNotInContext
+        }
         try context.save()
     }
 

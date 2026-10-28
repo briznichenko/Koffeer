@@ -8,6 +8,7 @@ private final class FakeBlendsRepository: BlendsRepository {
     var insertCallCount = 0
     var deleteCallCount = 0
     var shouldThrowOnFetch = false
+    var shouldThrowOnDelete = false
 
     func fetchBlends() async throws -> [CoffeeBlend] {
         if shouldThrowOnFetch {
@@ -24,6 +25,7 @@ private final class FakeBlendsRepository: BlendsRepository {
     func update(_ blend: CoffeeBlend) async throws {}
 
     func delete(_ blend: CoffeeBlend) async throws {
+        if shouldThrowOnDelete { throw FakeRepositoryError.fetchFailed }
         deleteCallCount += 1
         blends.removeAll { $0 === blend }
     }
@@ -47,7 +49,7 @@ struct BlendsViewModelTests {
     }
 
     @Test
-    func loadFailureResultsInEmptyBlends() async {
+    func loadFailurePreservesLoadedBlendsAndReportsError() async {
         let repository = FakeBlendsRepository()
         repository.shouldThrowOnFetch = true
         let viewModel = BlendsViewModel(blendsRepository: repository)
@@ -55,7 +57,38 @@ struct BlendsViewModelTests {
 
         await viewModel.load()
 
-        #expect(viewModel.blends.isEmpty)
+        #expect(viewModel.blends.map(\.name) == ["Stale"])
+        #expect(viewModel.loadErrorMessage != nil)
+        #expect(!viewModel.isLoading)
+    }
+
+    @Test
+    func successfulRetryClearsLoadError() async {
+        let repository = FakeBlendsRepository()
+        repository.shouldThrowOnFetch = true
+        let viewModel = BlendsViewModel(blendsRepository: repository)
+        await viewModel.load()
+        repository.shouldThrowOnFetch = false
+        repository.blends = [CoffeeBlend(name: "Recovered")]
+
+        await viewModel.load()
+
+        #expect(viewModel.loadErrorMessage == nil)
+        #expect(viewModel.blends.map(\.name) == ["Recovered"])
+    }
+
+    @Test
+    func failedDeletionKeepsBlendAndReportsError() async {
+        let repository = FakeBlendsRepository()
+        repository.blends = [CoffeeBlend(name: "Keep")]
+        repository.shouldThrowOnDelete = true
+        let viewModel = BlendsViewModel(blendsRepository: repository)
+        await viewModel.load()
+
+        await viewModel.delete(at: IndexSet(integer: 0))
+
+        #expect(viewModel.blends.map(\.name) == ["Keep"])
+        #expect(viewModel.operationErrorMessage != nil)
     }
 
     @Test

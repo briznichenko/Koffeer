@@ -30,11 +30,24 @@ struct BlendsView: View {
     var body: some View {
         NavigationSplitView {
             List {
+                if viewModel.isLoading {
+                    ProgressView("Loading blends…")
+                }
+                if let message = viewModel.loadErrorMessage {
+                    Text(message).foregroundStyle(.red)
+                    Button("Retry") { Task { await viewModel.load() } }
+                }
+                if let message = viewModel.operationErrorMessage {
+                    Text(message).foregroundStyle(.red)
+                }
                 ForEach(viewModel.blends) { blend in
                     NavigationLink {
                         Button("Done") {
-                            onDismiss?(blend)
-                            dismiss()
+                            if let onDismiss {
+                                onDismiss(blend)
+                            } else {
+                                dismiss()
+                            }
                         }
                     } label: {
                         HStack {
@@ -53,12 +66,15 @@ struct BlendsView: View {
                 .onDelete { offsets in
                     Task { await viewModel.delete(at: offsets) }
                 }
+                .deleteDisabled(viewModel.isMutating)
             }
+            .refreshable { await viewModel.load() }
             .toolbar {
                 ToolbarItem {
                     Button(action: { Task { await viewModel.addBlend() } }) {
                         Label("Add Item", systemImage: "plus")
                     }
+                    .disabled(viewModel.isMutating)
                 }
             }
         } detail: {

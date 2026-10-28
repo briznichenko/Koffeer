@@ -26,6 +26,16 @@ struct RecipesView: View {
     var body: some View {
         NavigationSplitView {
             List {
+                if viewModel.isLoading {
+                    ProgressView("Loading brews…")
+                }
+                if let message = viewModel.loadErrorMessage {
+                    Text(message).foregroundStyle(.red)
+                    Button("Retry") { Task { await viewModel.load() } }
+                }
+                if let message = viewModel.operationErrorMessage {
+                    Text(message).foregroundStyle(.red)
+                }
                 ForEach(viewModel.items) { item in
                     NavigationLink {
                         RecipeView(item: item)
@@ -48,7 +58,9 @@ struct RecipesView: View {
                 .onDelete { offsets in
                     Task { await viewModel.delete(at: offsets) }
                 }
+                .deleteDisabled(viewModel.isMutating)
             }
+            .refreshable { await viewModel.load() }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -57,6 +69,7 @@ struct RecipesView: View {
                     Button(action: { Task { await viewModel.addItem() } }) {
                         Label("Add Item", systemImage: "plus")
                     }
+                    .disabled(viewModel.isMutating)
                 }
             }
         } detail: {
@@ -67,8 +80,17 @@ struct RecipesView: View {
                 blendsRepository: blendsRepository,
                 textRecognitionService: textRecognitionService
             ) { newBlend in
-                item.coffeeBlend = newBlend
-                Task { await viewModel.load() }
+                Task { await viewModel.assignBlend(newBlend, to: item) }
+            }
+            .disabled(viewModel.isMutating)
+            .interactiveDismissDisabled(viewModel.isMutating)
+            .safeAreaInset(edge: .bottom) {
+                if let message = viewModel.operationErrorMessage {
+                    Text(message)
+                        .foregroundStyle(.red)
+                        .padding()
+                        .background(.regularMaterial)
+                }
             }
         }
         .task {

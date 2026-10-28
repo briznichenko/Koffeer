@@ -23,6 +23,11 @@ A SwiftUI + SwiftData iOS app for tracking coffee brew recipes and coffee blends
 MVVM with protocol-based repositories, wired by hand in `RootDIView` — no
 singletons, no service locator.
 
+Repository `update(_:)` requires a model owned by that repository's context and
+saves all pending changes in the context. Editors restore their model fields
+after a failed save and retain the draft for retry. Blends referenced by saved
+brews cannot be deleted until those brews are reassigned or deleted.
+
 ## Current limitations
 
 - ViewModels still use `ObservableObject` / `@Published`; migration to
@@ -31,8 +36,9 @@ singletons, no service locator.
   lifecycle, downsampling, or thumbnail cache.
 - OCR imports recognized text directly into notes; errors and overlapping work
   need explicit handling.
-- Four Swift Testing tests cover `BlendsViewModel`. The other three ViewModels
-  have no tests yet; UI tests remain Xcode scaffolding.
+- Eighteen Swift Testing tests cover blend editing, both list ViewModels, and
+  persistence boundaries. `RecipeViewModel` still needs coverage; UI tests
+  remain Xcode scaffolding.
 - Brew-step rendering and the timer need separate follow-up changes.
 
 ## Next work

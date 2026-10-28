@@ -17,6 +17,9 @@ final class BlendViewModel: ObservableObject {
     @Published var bitterness: Int
     @Published var imageData: Data?
 
+    @Published private(set) var isSaving = false
+    @Published private(set) var saveErrorMessage: String?
+
     @Published var isPhotoPickerPresented: Bool = false
     @Published var selectedPhotoItem: PhotosPickerItem?
 
@@ -37,7 +40,21 @@ final class BlendViewModel: ObservableObject {
         self.imageData = blend.imageData
     }
 
-    func saveChanges() async {
+    func saveChanges() async -> Bool {
+        guard !isSaving else { return false }
+        isSaving = true
+        saveErrorMessage = nil
+        defer { isSaving = false }
+
+        let original = (
+            name: blend.name,
+            details: blend.details,
+            sweetness: blend.sweetness,
+            sourness: blend.sourness,
+            bitterness: blend.bitterness,
+            imageData: blend.imageData
+        )
+
         blend.name = name
         blend.details = detailsText.isEmpty ? nil : detailsText
         blend.sweetness = sweetness
@@ -46,8 +63,16 @@ final class BlendViewModel: ObservableObject {
         blend.imageData = imageData
         do {
             try await blendsRepository.update(blend)
+            return true
         } catch {
-            print("Failed to save blend: \(error)")
+            blend.name = original.name
+            blend.details = original.details
+            blend.sweetness = original.sweetness
+            blend.sourness = original.sourness
+            blend.bitterness = original.bitterness
+            blend.imageData = original.imageData
+            saveErrorMessage = "Couldn’t save this blend. Your edits are still here. Try again."
+            return false
         }
     }
 

@@ -1,24 +1,29 @@
 # Koffeer TODOs
 
-Reviewed 2026-10-18 against the current source. Each task should be a separate,
+Reviewed 2026-10-28 against the current source. Each task should be a separate,
 focused change. Write Swift Testing tests before adding behavior; use protocol
 fakes for ViewModels and integration tests for persistence and files.
 
 ## 1. Reliable editing and persistence
 
-- [ ] Make `BlendViewModel.saveChanges()` report success or failure. Keep the
+- [x] Make `BlendViewModel.saveChanges()` report success or failure. Keep the
   editor and draft open on failure; dismiss only after a successful save.
-- [ ] Define how failed saves restore already-mutated SwiftData model fields,
+- [x] Define how failed saves restore already-mutated SwiftData model fields,
   so a later save cannot accidentally persist a failed edit.
-- [ ] Add visible loading, error, and retry states to list and editor ViewModels.
+- [x] Add visible loading, error, and retry states to list and editor ViewModels.
   Distinguish a failed fetch from an empty list and preserve loaded content on
   refresh failure. Update the existing fetch-failure test with the new behavior.
-- [ ] Move blend assignment from `RecipesView` into its ViewModel and save it
+- [x] Move blend assignment from `RecipesView` into its ViewModel and save it
   explicitly through the repository; test failure and relaunch/readback.
-- [ ] Clarify repository `update(_:)` semantics: both implementations currently
-  save the context without using the supplied parameter.
-- [ ] Define blend deletion behavior for linked brews before changing the
-  relationship or delete rules; verify it with an in-memory SwiftData container.
+- [x] Clarify repository `update(_:)` semantics: both implementations require
+  the supplied model to belong to their context, then save all pending changes.
+- [x] Prevent deletion of blends linked to brews, as chosen on 2026-10-28.
+  Enforce this in the repository without changing the schema or delete rules;
+  verify linked and unlinked deletion with an in-memory SwiftData container.
+
+Completed with 18 passing unit and integration tests. Failed edits restore the
+model's previous fields while preserving the editor draft. Assignment readback
+uses a fresh context; process relaunch and visual interaction remain manual checks.
 
 ## 2. Brew steps and timer
 
